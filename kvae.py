@@ -14,7 +14,13 @@ from keras import backend as K
 from keras import metrics
 
 
-def make_vae(input_dim=784, intermediate_dim=256, latent_dim=2, epsilon_std=1.0):
+def make_vae(
+        input_dim=784,
+        intermediate_dim=256,
+        latent_dim=2,
+        epsilon_std=1.0,
+        optimizer='rmsprop',
+    ):
     x = Input(shape=(input_dim,))
     h = Dense(intermediate_dim, activation='relu')(x)
     z_mean = Dense(latent_dim)(h)
@@ -49,7 +55,7 @@ def make_vae(input_dim=784, intermediate_dim=256, latent_dim=2, epsilon_std=1.0)
     vae_loss = K.mean(xent_loss + kl_loss)
 
     vae.add_loss(vae_loss)
-    vae.compile(optimizer='rmsprop')
+    vae.compile(optimizer=optimizer)
 
     return vae, encoder, decoder
 
